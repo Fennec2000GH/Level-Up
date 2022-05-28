@@ -1,0 +1,5 @@
+couchdb
+maturin
+streamlit
+wasmer
+wasmer_compiler_cranelift
