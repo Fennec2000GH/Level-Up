@@ -89,13 +89,13 @@ jobs:
       # - python/install-packages:
       #     venv-path: venv
       - run:
-          name: Install required packages for Python
-          command: python3.10 -m pip install -r requirements.txt
-      - run:
           name: Create virtualenv
           command: > 
             python3.10 -m venv venv && 
             source ./venv/bin/activate
+      - run:
+          name: Install required packages for Python
+          command: pip install -r requirements.txt
       - rust/install
       - run:
           name: Compile Rust bindings to Python
