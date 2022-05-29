@@ -99,7 +99,9 @@ jobs:
       - rust/install
       - run:
           name: Compile Rust bindings to Python
-          command: ./venv/bin/maturin develop
+          command: >
+            source ./venv/bin/activate && 
+            ./venv/bin/maturin develop
       - run:
           name: Run sample code using imported library compiled from Rust
           command: python ~/project/src/main.py
