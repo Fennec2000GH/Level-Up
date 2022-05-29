@@ -84,10 +84,18 @@ jobs:
             sudo add-apt-repository ppa:deadsnakes/ppa -y &&
             sudo apt-get install python3.10 -y
       - run:
-          name: Install pip package manager for Pytohn 3.10
+          name: Install pip package manager for Python 3.10
           command: sudo apt-get install python3-distutils -y
-      - python/install-packages:
-          venv-path: venv
+      # - python/install-packages:
+      #     venv-path: venv
+      - run:
+          name: Install required packages for Python
+          command: python3.10 -m pip install -r requirements.txt
+      - run:
+          name: Create virtualenv
+          command: > 
+            python3.10 -m venv venv && 
+            source ./venv/bin/activate
       - rust/install
       - run:
           name: Compile Rust bindings to Python
