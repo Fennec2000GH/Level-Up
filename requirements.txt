@@ -1,4 +1,5 @@
 couchdb
+kivy
 maturin
 streamlit
 wasmer
