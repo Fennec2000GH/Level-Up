@@ -1,26 +1,122 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine.
-# See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
-# Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
+orbs: 
+  python: circleci/python@2.0.3
+  rust: circleci/rust@1.6.0
+
 jobs:
-  say-hello:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+  # Build
+  install_python_dependencies:
     docker:
-      - image: cimg/base:stable
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+      - image: cimg/python:3.10.4
+
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - python/install-packages:
+          venv-path: venv
+      - run:
+          name: Set up virtualenv
+          command: > 
+            python -m venv venv && 
+            source ./venv/bin/activate
+
+  install_rust_dependencies:
+    docker:
+      - image: cimg/rust:1.61.0
+
+    steps:
+      - checkout
+      - rust/install
+
+  pyo3_initialize:
+    docker:
+      - image: cimg/python:3.10.4
+
     steps:
       - checkout
       - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
+          name: Generate new package source for PyO3
+          command: maturin init
 
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+  pyo3_develop:
+    docker:
+      - image: cimg/python:3.10.4
+
+    steps:
+      - checkout
+      - run:
+          name: Build package and install Rust bindings into virtualenv
+          command: maturin develop
+
+  # Test
+  test_pyo3:
+    docker:
+      - image: cimg/python:3.10.4
+
+    working_directory: ~/project/src/
+
+    steps:
+      - checkout
+      - run:
+          name: Run sample code using imported library compiled from Rust
+          command: python main.py
+
+  # Development
+  build:
+    machine:
+      image: ubuntu-2004:current
+    resource_class: large
+
+    steps:
+      - checkout
+    #  takes too long with no output
+      # - run:
+      #     name: Update and upgrade Linux packages 
+      #     command: >
+      #       sudo apt-get update && 
+      #       sudo apt-get upgrade -y
+      - run:
+          name: Install Python 3.10
+          command: >
+            sudo apt install software-properties-common -y &&
+            sudo add-apt-repository ppa:deadsnakes/ppa -y &&
+            sudo apt-get install python3.10 -y
+      - run:
+          name: Install pip package manager for Python 3.10
+          command: sudo apt-get install python3-distutils -y
+      # - python/install-packages:
+      #     venv-path: venv
+      - run:
+          name: Create virtualenv
+          command: > 
+            python3.10 -m venv venv && 
+            source ./venv/bin/activate
+      - run:
+          name: Install required packages for Python
+          command: ./venv/bin/pip install -r requirements.txt
+      - rust/install
+      - run:
+          name: Compile Rust bindings to Python
+          command: >
+            source ./venv/bin/activate && 
+            ./venv/bin/maturin develop
+      - run:
+          name: Run sample code using imported library compiled from Rust
+          command: ./venv/bin/python ~/project/src/test_pyo3.py
+
 workflows:
-  say-hello-workflow:
+  dev:
     jobs:
-      - say-hello
+      # - install_python_dependencies
+      # - install_rust_dependencies
+      # - pyo3_develop:
+      #     requires:
+      #       - install_python_dependencies
+      #       - install_rust_dependencies
+      # - test_pyo3:
+      #     requires:
+      #       - pyo3_develop
+
+      - build
