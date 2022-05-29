@@ -71,13 +71,22 @@ jobs:
 
     steps:
       - checkout
+      - run:
+          name: Update and upgrade Linux packages 
+          command: >
+            sudo apt-get update && 
+            sudo apt-get upgrade -y
+      - run:
+          name: Install Python 3.10
+          command: >
+            sudo apt install software-properties-common -y &&
+            sudo add-apt-repository ppa:deadsnakes/ppa -y &&
+            sudo apt-get install python3.10 -y
+      - run:
+          name: Install pip package manager for Pytohn 3.10
+          command: sudo apt-get install python3-distutils -y
       - python/install-packages:
           venv-path: venv
-      - run:
-          name: Set up virtualenv
-          command: > 
-            python -m venv venv && 
-            source ./venv/bin/activate
       - rust/install
       - run:
           name: Compile Rust bindings to Python
