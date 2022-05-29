@@ -95,7 +95,7 @@ jobs:
             source ./venv/bin/activate
       - run:
           name: Install required packages for Python
-          command: pip install -r requirements.txt
+          command: ./venv/bin/pip install -r requirements.txt
       - rust/install
       - run:
           name: Compile Rust bindings to Python
