@@ -12,9 +12,8 @@ jobs:
 
     steps:
       - checkout
-      - run:
-          name: Install dependencies from requirements.txt
-          command: python/install-packages
+      - python/install-packages:
+          venv-path: venv
 
       - run:
           name: Set up virtualenv
