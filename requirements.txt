@@ -1,6 +1,7 @@
 couchdb
 kivy
 maturin
+pyinstaller
 streamlit
 wasmer
 wasmer_compiler_cranelift
