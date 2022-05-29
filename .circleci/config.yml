@@ -21,6 +21,9 @@ jobs:
             python -m venv venv && 
             source ./venv/bin/activate
 
+      - setup_remote_docker:
+          docker_layer_caching: true
+
   install_rust_dependencies:
     docker:
       - image: cimg/rust:1.61.0
@@ -35,9 +38,9 @@ jobs:
 
     steps:
       - checkout
-      - run:
-          name: Install maturin
-          command: pip install maturin
+      # - run:
+      #     name: Install maturin
+      #     command: pip install maturin
 
       - run:
           name: Generate new package source for PyO3
@@ -75,12 +78,10 @@ workflows:
     jobs:
       - install_python_dependencies
       - install_rust_dependencies
-      - pyo3_initialize:
-          requires: 
-            - install_python_dependencies
-      - pyo3_develop:
-          requires:
-            - pyo3_initialize
+      # - pyo3_initialize:
+      #     requires: 
+      #       - install_python_dependencies
+      - pyo3_develop
       - test_pyo3:
           requires:
             - pyo3_develop
