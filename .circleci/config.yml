@@ -55,7 +55,7 @@ jobs:
     docker:
       - image: cimg/python:3.10.4
 
-    working_directory: ~/src/
+    working_directory: ~/project/src/
 
     steps:
       - checkout
@@ -68,6 +68,12 @@ workflows:
     jobs:
       - install_python_dependencies
       - install_rust_dependencies
-      - pyo3_initialize
-      - pyo3_develop
-      - test_pyo3
+      - pyo3_initialize:
+          requires: 
+            - install_python_dependencies
+      - pyo3_develop:
+          requires:
+            - pyo3_initialize
+      - test_pyo3:
+          requires:
+            - pyo3_develop
