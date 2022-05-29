@@ -71,8 +71,6 @@ jobs:
 
     steps:
       - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
       - python/install-packages:
           venv-path: venv
       - run:
