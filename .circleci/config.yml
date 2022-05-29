@@ -81,7 +81,10 @@ workflows:
       # - pyo3_initialize:
       #     requires: 
       #       - install_python_dependencies
-      - pyo3_develop
+      - pyo3_develop:
+          requires:
+            - install_python_dependencies
+            - install_rust_dependencies
       - test_pyo3:
           requires:
             - pyo3_develop
