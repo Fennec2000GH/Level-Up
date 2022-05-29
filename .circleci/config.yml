@@ -31,7 +31,7 @@ jobs:
 
   pyo3_initialize:
     docker:
-      - image: cimg/base:stable
+      - image: cimg/python:3.10.4
 
     steps:
       - checkout
@@ -45,7 +45,7 @@ jobs:
 
   pyo3_develop:
     docker:
-      - image: cimg/base:stable
+      - image: cimg/python:3.10.4
 
     steps:
       - checkout
