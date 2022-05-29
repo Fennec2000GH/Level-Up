@@ -2,10 +2,14 @@
 
 ![language](https://img.shields.io/badge/language-python3.9-yellow?style=plastic&logo=appveyor)
 ![language](https://img.shields.io/badge/language-Rust-maroon?style=plastic&logo=appveyor)
-[![Star](https://img.shields.io/github/stars/Fennec2000GH/FinCompute.svg?logo=github&style=social)](https://gitHub.com/Fennec2000GH/Level-Up)
+[![Star](https://img.shields.io/github/stars/Fennec2000GH/Level-Up.svg?logo=github&style=social)](https://gitHub.com/Fennec2000GH/Level-Up)
 
 ![Deep Learning](https://img.shields.io/badge/Rust%20Bindings-PyO3-lightgray?style=for-the-badge&logo=appveyor)
 ![framework](https://img.shields.io/badge/framework-Kivy-black?style=for-the-badge&logo=appveyor)
+
+
+[![<ORG_NAME>](https://circleci.com/gh/Fennec2000GH/Level-Up.svg?style=svg)](https://circleci.com/gh/Fennec2000GH/Level-Up)
+
 ----------------------------------------------------------------------------------------------------
 
 Learning and gaming do not have to be separate. Level up your points by memorizing flash cards! Study with cards with no need for any online account. 
