@@ -12,6 +12,12 @@ jobs:
 
     steps:
       - checkout
+
+      - setup_remote_docker:
+          docker_layer_caching: true
+
+      - run: docker build .
+
       - python/install-packages:
           venv-path: venv
 
@@ -20,9 +26,6 @@ jobs:
           command: > 
             python -m venv venv && 
             source ./venv/bin/activate
-
-      - setup_remote_docker:
-          docker_layer_caching: true
 
   install_rust_dependencies:
     docker:
@@ -49,9 +52,9 @@ jobs:
 
     steps:
       - checkout
-      - run:
-          name: Activate virtualenv
-          command: source ./venv/bin/activate
+      # - run:
+      #     name: Activate virtualenv
+      #     command: source ./venv/bin/activate
 
       - run:
           name: Build package and install Rust bindings into virtualenv
