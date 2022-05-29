@@ -104,7 +104,7 @@ jobs:
             ./venv/bin/maturin develop
       - run:
           name: Run sample code using imported library compiled from Rust
-          command: python ~/project/src/main.py
+          command: ./venv/bin/python ~/project/src/main.py
 
 workflows:
   dev:
