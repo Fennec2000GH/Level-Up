@@ -38,9 +38,6 @@ jobs:
 
     steps:
       - checkout
-      # - run:
-      #     name: Install maturin
-      #     command: pip install maturin
 
       - run:
           name: Generate new package source for PyO3
@@ -53,8 +50,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install maturin
-          command: pip install maturin
+          name: Activate virtualenv
+          command: source ./venv/bin/activate
 
       - run:
           name: Build package and install Rust bindings into virtualenv
