@@ -71,11 +71,12 @@ jobs:
 
     steps:
       - checkout
-      - run:
-          name: Update and upgrade Linux packages 
-          command: >
-            sudo apt-get update && 
-            sudo apt-get upgrade -y
+    #  takes too long with no output
+      # - run:
+      #     name: Update and upgrade Linux packages 
+      #     command: >
+      #       sudo apt-get update && 
+      #       sudo apt-get upgrade -y
       - run:
           name: Install Python 3.10
           command: >
