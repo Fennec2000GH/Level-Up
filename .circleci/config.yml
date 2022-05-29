@@ -12,15 +12,10 @@ jobs:
 
     steps:
       - checkout
-
       - setup_remote_docker:
           docker_layer_caching: true
-
-      - run: docker build .
-
       - python/install-packages:
           venv-path: venv
-
       - run:
           name: Set up virtualenv
           command: > 
@@ -41,7 +36,6 @@ jobs:
 
     steps:
       - checkout
-
       - run:
           name: Generate new package source for PyO3
           command: maturin init
@@ -52,10 +46,6 @@ jobs:
 
     steps:
       - checkout
-      # - run:
-      #     name: Activate virtualenv
-      #     command: source ./venv/bin/activate
-
       - run:
           name: Build package and install Rust bindings into virtualenv
           command: maturin develop
@@ -73,18 +63,42 @@ jobs:
           name: Run sample code using imported library compiled from Rust
           command: python main.py
 
+  # Development
+  build:
+    machine:
+      image: ubuntu-2004:current
+    resource_class: large
+
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - python/install-packages:
+          venv-path: venv
+      - run:
+          name: Set up virtualenv
+          command: > 
+            python -m venv venv && 
+            source ./venv/bin/activate
+      - rust/install
+      - run:
+          name: Compile Rust bindings to Python
+          command: maturin init && maturin develop
+      - run:
+          name: Run sample code using imported library compiled from Rust
+          command: python ~/project/src/main.py
+
 workflows:
   dev:
     jobs:
-      - install_python_dependencies
-      - install_rust_dependencies
-      # - pyo3_initialize:
-      #     requires: 
+      # - install_python_dependencies
+      # - install_rust_dependencies
+      # - pyo3_develop:
+      #     requires:
       #       - install_python_dependencies
-      - pyo3_develop:
-          requires:
-            - install_python_dependencies
-            - install_rust_dependencies
-      - test_pyo3:
-          requires:
-            - pyo3_develop
+      #       - install_rust_dependencies
+      # - test_pyo3:
+      #     requires:
+      #       - pyo3_develop
+
+      - build
